@@ -64,11 +64,16 @@ namespace Wabbajack_Automagic
             statusLabel.Content = "INACTIVE";
             statusLabel.Foreground = System.Windows.Media.Brushes.Red;
             outputToConsole("Automagic stopped.");
+
         }
 
         private void magicTimer_Tick(object sender, EventArgs e)
         {
             outputToConsole("Checking for button");
+
+            var oldX = System.Windows.Forms.Cursor.Position.X;
+            var oldY = System.Windows.Forms.Cursor.Position.Y;
+
             SetCursorPos(0, 0);
             currentScreen = Screenshot();
             currentPoint = Find(currentScreen, slowButton);
@@ -76,12 +81,14 @@ namespace Wabbajack_Automagic
             {
                 outputToConsole("Found button at: (" + currentPoint.Value.X + "," + currentPoint.Value.Y + ")");
                 clickMouse(currentPoint.Value.X + (slowButton.Width / 2), currentPoint.Value.Y + (slowButton.Height / 2));
-                wait(5000);
+                //wait(5000);
             }
             else
             {
                 outputToConsole("Couldn't find button");
             }
+
+            SetCursorPos(oldX, oldY);
         }
 
         private void clearConsole()
