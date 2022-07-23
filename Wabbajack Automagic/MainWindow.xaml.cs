@@ -39,6 +39,7 @@ namespace Wabbajack_Automagic
             magicTimer.Interval = new TimeSpan(0, 0, 5);
             statusLabel.Content = "INACTIVE";
             statusLabel.Foreground = System.Windows.Media.Brushes.Red;
+            outputToConsole("Warning: Do not move the cursor over the download button yourself!");
         }
 
         private void ButtonStart_Click(object sender, RoutedEventArgs e)
@@ -71,24 +72,25 @@ namespace Wabbajack_Automagic
         {
             outputToConsole("Checking for button");
 
-            var oldX = System.Windows.Forms.Cursor.Position.X;
-            var oldY = System.Windows.Forms.Cursor.Position.Y;
-
-            SetCursorPos(0, 0);
             currentScreen = Screenshot();
             currentPoint = Find(currentScreen, slowButton);
             if (currentPoint.HasValue)
             {
+                var oldX = System.Windows.Forms.Cursor.Position.X;
+                var oldY = System.Windows.Forms.Cursor.Position.Y;
+
                 outputToConsole("Found button at: (" + currentPoint.Value.X + "," + currentPoint.Value.Y + ")");
                 clickMouse(currentPoint.Value.X + (slowButton.Width / 2), currentPoint.Value.Y + (slowButton.Height / 2));
-                //wait(5000);
+
+                SetCursorPos(oldX, oldY);
+
+                wait(5000);
             }
             else
             {
                 outputToConsole("Couldn't find button");
             }
 
-            SetCursorPos(oldX, oldY);
         }
 
         private void clearConsole()
